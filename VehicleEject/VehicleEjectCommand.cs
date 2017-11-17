@@ -92,9 +92,9 @@ namespace PhaserArray.VehicleEject
 						}
 						return;
 					}
-					if (byte.TryParse(command[0], out var result))
+					if (int.TryParse(command[0], out var result))
 					{
-						if (result - 1 >= vehicle.passengers.Length || result == 0)
+						if (result - 1 >= vehicle.passengers.Length || result < 1)
 						{
 							UnturnedChat.Say(caller, VehicleEject.Instance.Translate("eject_error_notaseat", result), Color.yellow);
 							return;
