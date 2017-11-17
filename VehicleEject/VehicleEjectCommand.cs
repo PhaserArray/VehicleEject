@@ -26,21 +26,19 @@ namespace PhaserArray.VehicleEject
 			if (player.IsInVehicle)
 			{
 				var vehicle = player.CurrentVehicle;
-				Logger.Log(R.Permissions.HasPermission(caller, "vehicle.canalwayseject").ToString());
-				Logger.Log(HasPermission(caller, "vehicle.canalwayseject").ToString());
-				Logger.Log(player.IsAdmin.ToString());
-				Logger.Log(VehicleEject.Config.AdminsCanEject.ToString());
 				if (!HasPermission(caller, "vehicle.canalwayseject") && !(player.IsAdmin && VehicleEject.Config.AdminsCanEject))
 				{
 					if (!VehicleEject.Config.DriverCanEject &&
 						!VehicleEject.Config.LastToLockCanEject)
 					{
+						Logger.LogWarning("The driver nor the last to lock can eject!");
 						return;
 					}
 					if (VehicleEject.Config.DriverCanEject &&
 						!VehicleEject.Config.LastToLockCanEject &&
 						!vehicle.checkDriver(player.CSteamID))
 					{
+						Logger.LogWarning("Caller is not the driver!");
 						UnturnedChat.Say(caller, VehicleEject.Instance.Translate("eject_error_notdriver"), Color.red);
 						return;
 					}
@@ -48,6 +46,7 @@ namespace PhaserArray.VehicleEject
 						!VehicleEject.Config.DriverCanEject &&
 						vehicle.lockedOwner != player.CSteamID)
 					{
+						Logger.LogWarning("Caller is not the last to lock!");
 						UnturnedChat.Say(caller, VehicleEject.Instance.Translate("eject_error_notlasttolock"), Color.red);
 						return;
 					}
@@ -56,6 +55,7 @@ namespace PhaserArray.VehicleEject
 						vehicle.lockedOwner != player.CSteamID &&
 						!vehicle.checkDriver(player.CSteamID))
 					{
+						Logger.LogWarning("Caller is not the driver nor the last to lock!");
 						UnturnedChat.Say(caller, VehicleEject.Instance.Translate("eject_error_noteither"), Color.red);
 						return;
 					}
@@ -139,6 +139,7 @@ namespace PhaserArray.VehicleEject
 			}
 			else
 			{
+				Logger.LogWarning("Player is not in a vehicle!");
 				UnturnedChat.Say(caller, VehicleEject.Instance.Translate("eject_error_notinvehicle"), Color.red);
 			}
 		}
